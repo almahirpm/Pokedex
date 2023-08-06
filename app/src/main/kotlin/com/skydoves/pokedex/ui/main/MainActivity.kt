@@ -17,19 +17,26 @@
 package com.skydoves.pokedex.ui.main
 
 import android.os.Bundle
+import android.view.Menu
+import android.widget.SearchView
 import androidx.activity.viewModels
 import androidx.annotation.VisibleForTesting
+import androidx.core.view.MenuItemCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.skydoves.bindables.BindingActivity
 import com.skydoves.pokedex.R
+import com.skydoves.pokedex.binding.RecyclerViewBinding
 import com.skydoves.pokedex.databinding.ActivityMainBinding
 import com.skydoves.transformationlayout.onTransformationStartContainer
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main) {
 
   @get:VisibleForTesting
   internal val viewModel: MainViewModel by viewModels()
+  private lateinit var rv: RecyclerView
 
   override fun onCreate(savedInstanceState: Bundle?) {
     onTransformationStartContainer()
@@ -37,6 +44,31 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
     binding {
       adapter = PokemonAdapter()
       vm = viewModel
+      rv = recyclerView
+      setSupportActionBar(toolbar)
     }
+  }
+
+  override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    val inflater = menuInflater
+    inflater.inflate(R.menu.menu, menu)
+    val searchViewItem = menu?.findItem(R.id.app_bar_search)
+    val searchViewAndroidActionBar = MenuItemCompat.getActionView(searchViewItem) as SearchView
+    searchViewAndroidActionBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+      override fun onQueryTextSubmit(query: String): Boolean {
+        searchViewAndroidActionBar.clearFocus()
+        filterPokemon(query)
+        return true
+      }
+
+      override fun onQueryTextChange(newText: String): Boolean {
+        return false
+      }
+    })
+    return super.onCreateOptionsMenu(menu)
+  }
+
+  fun filterPokemon(query: String){
+    RecyclerViewBinding.bindSubmitList(rv, viewModel.filterPokemonList(query))
   }
 }

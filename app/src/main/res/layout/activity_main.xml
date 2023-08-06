@@ -35,19 +35,19 @@
     android:background="@color/background"
     android:clipToPadding="false">
 
-    <com.google.android.material.appbar.AppBarLayout
-      android:id="@+id/appBarLayout"
+    <androidx.appcompat.widget.Toolbar
+      android:id="@+id/toolbar"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:background="?attr/colorPrimary"
+      android:minHeight="?attr/actionBarSize"
+      app:actionViewClass="android.widget.SearchView"
+      app:theme="@style/ThemeOverlay.AppCompat.Dark"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent">
 
-      <include
-        android:id="@+id/main_toolbar"
-        layout="@layout/toolbar_home" />
-
-    </com.google.android.material.appbar.AppBarLayout>
+    </androidx.appcompat.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/recyclerView"
@@ -63,7 +63,7 @@
       app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+      app:layout_constraintTop_toBottomOf="@id/toolbar"
       app:paginationPokemonList="@{vm}"
       app:spanCount="2"
       app:submitList="@{vm.pokemonList}"

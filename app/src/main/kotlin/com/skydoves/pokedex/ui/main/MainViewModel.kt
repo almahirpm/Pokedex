@@ -60,6 +60,10 @@ class MainViewModel @Inject constructor(
     Timber.d("init MainViewModel")
   }
 
+  fun filterPokemonList(pokemonToSearch: String): List<Pokemon>{
+    return pokemonList.filter { it -> it.name == pokemonToSearch }
+  }
+
   @MainThread
   fun fetchNextPokemonList() {
     if (!isLoading) {
